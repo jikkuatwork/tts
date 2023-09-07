@@ -35,16 +35,108 @@
 
     <script src="https://unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.toolbomber.com/js/WebArray.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
 
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
     />
+    <style>
+      [x-cloak] {
+        display: none;
+      }
+    </style>
     <link rel="stylesheet" href="https://cdn.toolbomber.com/css/tw.css" />
   </head>
   <body>
-    <div class="page bg-dark-100 c">
-      <div class="w-full h-screen max-w-3xl bg-dark-200"></div>
+    <audio
+      id="audio-player"
+      class="hidden"
+      src="https://bff.listnr.tech/backend/audio/get/c6fab5d0-fc32-4691-97de-8bbae9daa8b5_gc.mp3"
+      preload="none"
+    ></audio>
+    <div
+      x-data="{ isConverting: false, isPlaying: false }"
+      class="page bg-dark-200 c"
+    >
+      <div
+        class="w-full h-screen max-w-3xl bg-dark-200 flex flex-col justify-end p-8 gap-4"
+      >
+        <div class="h-full bg-gray-800 rounded-lg overflow-hidden">
+          <div
+            class="history-card flex-col h-full c p-4 bg-gray-300 cursor-pointer hover:bg-gray-100 t relative"
+            @click="isPlaying = !isPlaying; isPlaying ? play() : stop()"
+          >
+            <div
+              id="play-pause-animation"
+              class="play-button mr-4 h-64 w-64 p-1"
+            ></div>
+            <div
+              class="meta text-xs text-black text-opacity-60 absolute bottom-4"
+            >
+              2 minutes ago
+            </div>
+          </div>
+        </div>
+        <div class="h-1/2">
+          <textarea
+            placeholder="Paste text here"
+            class="w-full p-4 h-full rounded-lg shadow-inner"
+          ></textarea>
+        </div>
+        <div
+          class="w-full bg-yellow-300 h-32 rounded-lg c cursor-pointer"
+          @click="isConverting = !isConverting"
+        >
+          <div
+            x-cloak
+            x-show="!isConverting"
+            class="open-sans text-3xl font-extralight uppercase tracking-wide"
+          >
+            Convert
+          </div>
+          <div x-cloak x-show="isConverting" class="w-8">
+            <div id="convert-animation"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
+
+  <script>
+    window.animationInstance = bodymovin.loadAnimation({
+      container: document.getElementById("convert-animation"),
+      path: "/convert.json",
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+    })
+
+    window.playPauseAnimation = bodymovin.loadAnimation({
+      container: document.getElementById("play-pause-animation"),
+      path: "/play-pause.json",
+      renderer: "svg",
+      loop: false,
+      autoplay: false,
+    })
+
+    window.audioPlayer = document.querySelector("#audio-player")
+
+    window.play = () => {
+      playPauseAnimation.setDirection(1)
+      playPauseAnimation.play()
+      audioPlayer.play()
+    }
+
+    window.stop = () => {
+      playPauseAnimation.setDirection(-1)
+      playPauseAnimation.play()
+      audioPlayer.pause()
+    }
+
+    audioPlayer.addEventListener("ended", () => {
+      console.log("ended")
+      stop()
+    })
+  </script>
 </html>
