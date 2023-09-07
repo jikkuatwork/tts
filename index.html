@@ -46,7 +46,7 @@
   </head>
   <body>
     <div
-      x-data="{ isConverting: false, isPlaying: false, audioURL: 'https://bff.listnr.tech/backend/audio/get/201103a7-5870-43ef-94c5-4b27726e806d_gc.mp3' }"
+      x-data="{ isConverting: false, isPlaying: false, audioURL: 'https://bff.listnr.tech/backend/audio/get/201103a7-5870-43ef-94c5-4b27726e806d_gc.mp3', placeholder: 'Press play for instructions! ☝️' }"
       class="page bg-dark-200 c"
     >
       <audio
@@ -61,7 +61,7 @@
         <div class="h-full bg-gray-800 rounded-lg overflow-hidden">
           <div
             class="history-card flex-col h-full c p-4 bg-gray-100 cursor-pointer hover:bg-white t relative"
-            @click="isPlaying = !isPlaying; isPlaying ? play() : stop()"
+            @click="!isPlaying ? play() : stop() ; isPlaying = !isPlaying; placeholder = 'Paste text here..' ; "
           >
             <div
               id="play-pause-animation"
@@ -77,13 +77,13 @@
         <div class="h-1/2">
           <textarea
             id="text"
-            placeholder="Paste text here"
+            x-bind:placeholder="placeholder"
             class="w-full p-4 h-full rounded-lg shadow-inner"
           ></textarea>
         </div>
         <div
           class="w-full bg-yellow-300 h-32 rounded-lg c cursor-pointer"
-          @click="isConverting = !isConverting; if(isConverting) { audioURL = await getAudio() ; isConverting = false }"
+          @click="isConverting = !isConverting; if(isConverting) { audioURL = await getAudio() ; isConverting = false ; audioPlayer.play() }"
         >
           <div
             x-cloak
@@ -147,7 +147,6 @@
     }
 
     https: audioPlayer.addEventListener("ended", () => {
-      console.log("ended")
       stop()
     })
   </script>
