@@ -49,16 +49,16 @@
     <link rel="stylesheet" href="https://cdn.toolbomber.com/css/tw.css" />
   </head>
   <body>
-    <audio
-      id="audio-player"
-      class="hidden"
-      src="https://bff.listnr.tech/backend/audio/get/c6fab5d0-fc32-4691-97de-8bbae9daa8b5_gc.mp3"
-      preload="none"
-    ></audio>
     <div
-      x-data="{ isConverting: false, isPlaying: false }"
+      x-data="{ isConverting: false, isPlaying: false, audioURL: 'https://bff.listnr.tech/backend/audio/get/c6fab5d0-fc32-4691-97de-8bbae9daa8b5_gc.mp3' }"
       class="page bg-dark-200 c"
     >
+      <audio
+        id="audio-player"
+        class="hidden"
+        x-bind:src="audioURL"
+        preload="none"
+      ></audio>
       <div
         class="w-full h-screen max-w-3xl bg-dark-200 flex flex-col justify-end p-8 gap-4"
       >
@@ -87,7 +87,7 @@
         </div>
         <div
           class="w-full bg-yellow-300 h-32 rounded-lg c cursor-pointer"
-          @click="isConverting = !isConverting; isConverting ? console.log(await getAudio()) : null"
+          @click="isConverting = !isConverting; if(isConverting) { audioURL = await getAudio() ; isConverting = false }"
         >
           <div
             x-cloak
