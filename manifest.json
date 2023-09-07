@@ -1,9 +1,9 @@
 {
-  "name": "TTS",
+  "name": "Parayu",
   "version": "0.1",
   "manifest_version": 2,
-  "short_name": "TTS",
-  "description": "TTS",
+  "short_name": "Parayu",
+  "description": "Parayu",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#28282e",
@@ -11,7 +11,7 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://i.imgur.com/dURj31a.png",
+      "src": "/assets/logo.png",
       "type": "image/png",
       "sizes": "512x512"
     }
