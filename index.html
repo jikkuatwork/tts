@@ -46,14 +46,14 @@
   </head>
   <body>
     <div
-      x-data="{ isConverting: false, isPlaying: false, audioURL: 'https://bff.listnr.tech/backend/audio/get/2b8f7d3e-c2f0-4710-9825-8fb200bf108f_gc.mp3' }"
+      x-data="{ isConverting: false, isPlaying: false, audioURL: 'https://bff.listnr.tech/backend/audio/get/201103a7-5870-43ef-94c5-4b27726e806d_gc.mp3' }"
       class="page bg-dark-200 c"
     >
       <audio
         id="audio-player"
         class="hidden"
         x-bind:src="audioURL"
-        preload="none"
+        preload="auto"
       ></audio>
       <div
         class="w-full h-screen max-w-3xl bg-dark-200 flex flex-col justify-end px-8 py-24 gap-4"
