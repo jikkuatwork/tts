@@ -46,7 +46,7 @@
   </head>
   <body>
     <div
-      x-data="{ isConverting: false, isPlaying: false, audioURL: 'https://bff.listnr.tech/backend/audio/get/c6fab5d0-fc32-4691-97de-8bbae9daa8b5_gc.mp3' }"
+      x-data="{ isConverting: false, isPlaying: false, audioURL: 'https://bff.listnr.tech/backend/audio/get/2b8f7d3e-c2f0-4710-9825-8fb200bf108f_gc.mp3' }"
       class="page bg-dark-200 c"
     >
       <audio
@@ -139,8 +139,10 @@
         return
       }
 
+      const encodedText = encodeURIComponent(text)
+
       return await fetch(
-        `https://parayu.toolbomber.com/api/tts?text=${text}`
+        `https://parayu.toolbomber.com/api/tts?text=${encodedText}`
       ).then(r => r.text())
     }
 
