@@ -103,7 +103,7 @@
         </div>
         <div
           class="w-full bg-yellow-300 h-32 rounded-lg c cursor-pointer"
-          @click="isConverting = !isConverting; if(isConverting) { audioURL = await getAudio() ; isConverting = false ; audioPlayer.play() }"
+          @click="isConverting = !isConverting; if(isConverting) { await getAudio() ; isConverting = false }"
         >
           <div
             x-cloak
@@ -161,9 +161,14 @@
 
       const encodedText = encodeURIComponent(text)
 
-      return await fetch(
+      const link = await fetch(
         `https://parayu.toolbomber.com/api/tts?text=${encodedText}`
       ).then(r => r.text())
+
+      audioPlayer.src = link
+      play()
+
+      return link
     }
 
     https: audioPlayer.addEventListener("ended", () => {
