@@ -136,10 +136,12 @@
     }
 
     window.getAudio = async () => {
-      console.log("getAudio")
+      const textArea = document.querySelector("textarea")
+      const text = textArea.value
 
-      const text =
-        "This is interesting, wonder how long it will work without any authorisation!"
+      if (text.trim() === "") {
+        return
+      }
 
       return await fetch(
         `https://tts-chi-seven.vercel.app/api/tts?text=${text}`
