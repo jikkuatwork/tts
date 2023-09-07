@@ -87,7 +87,7 @@
         </div>
         <div
           class="w-full bg-yellow-300 h-32 rounded-lg c cursor-pointer"
-          @click="isConverting = !isConverting; isConverting ? getAudio() : null"
+          @click="isConverting = !isConverting; isConverting ? console.log(await getAudio()) : null"
         >
           <div
             x-cloak
@@ -135,15 +135,15 @@
       audioPlayer.pause()
     }
 
-    window.getAudio = () => {
+    window.getAudio = async () => {
       console.log("getAudio")
 
       const text =
         "This is interesting, wonder how long it will work without any authorisation!"
 
-      fetch(`https://tts-chi-seven.vercel.app/api/tts?text=${text}`)
-        .then(r => r.text())
-        .then(console.log)
+      return await fetch(
+        `https://tts-chi-seven.vercel.app/api/tts?text=${text}`
+      ).then(r => r.text())
     }
 
     audioPlayer.addEventListener("ended", () => {
