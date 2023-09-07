@@ -64,7 +64,7 @@
       >
         <div class="h-full bg-gray-800 rounded-lg overflow-hidden">
           <div
-            class="history-card flex-col h-full c p-4 bg-gray-300 cursor-pointer hover:bg-gray-100 t relative"
+            class="history-card flex-col h-full c p-4 bg-gray-100 cursor-pointer hover:bg-white t relative"
             @click="isPlaying = !isPlaying; isPlaying ? play() : stop()"
           >
             <div
@@ -74,19 +74,20 @@
             <div
               class="meta text-xs text-black text-opacity-60 absolute bottom-4"
             >
-              2 minutes ago
+              just now
             </div>
           </div>
         </div>
         <div class="h-1/2">
           <textarea
+            id="text"
             placeholder="Paste text here"
             class="w-full p-4 h-full rounded-lg shadow-inner"
           ></textarea>
         </div>
         <div
           class="w-full bg-yellow-300 h-32 rounded-lg c cursor-pointer"
-          @click="isConverting = !isConverting"
+          @click="isConverting = !isConverting; isConverting ? getAudio() : null"
         >
           <div
             x-cloak
@@ -132,6 +133,17 @@
       playPauseAnimation.setDirection(-1)
       playPauseAnimation.play()
       audioPlayer.pause()
+    }
+
+    window.getAudio = () => {
+      console.log("getAudio")
+
+      const text =
+        "This is interesting, wonder how long it will work without any authorisation!"
+
+      fetch(`https://tts-chi-seven.vercel.app/api/tts?text=${text}`)
+        .then(r => r.text())
+        .then(console.log)
     }
 
     audioPlayer.addEventListener("ended", () => {
