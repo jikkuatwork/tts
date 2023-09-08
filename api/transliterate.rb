@@ -16,5 +16,5 @@ Handler = Proc.new do |request, response|
   response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
   response["Access-Control-Allow-Headers"] = "Content-Type"
 
-  response.body = Transliterate.new(from, to).get_suggestions(text, 4).to_json
+  response.body = "hello" # Transliterate.new(from, to).get_suggestions(text, 4).to_json
 end
