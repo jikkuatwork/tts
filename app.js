@@ -9,6 +9,16 @@ window.app = {
   defaultId: "534e49035",
   rootLink: "https://parayu.toolbomber.com/3/",
 
+  handlePlayback: () => {
+    console.log("playback")
+
+    app.isPlaying != app.isPlaying
+  },
+
+  handleShare: () => {
+    console.log("share")
+  },
+
   getText: () => document.querySelector("#text-area").value,
 
   setText: text => (document.querySelector("#text-area").value = text),
@@ -64,16 +74,46 @@ window.app = {
     return hashHex
   },
 
-  updateUI: () => {},
+  updatePlaybackUI: () => {
+    const glyphs = {}
+    glyphs.play = document.querySelector("#svg-play")
+    glyphs.pause = document.querySelector("#svg-pause")
+    glyphs.loader = document.querySelector("#svg-loader")
+
+    window.glyphs = glyphs
+
+    if (app.isConverting) {
+      glyphs.loader.classList.remove("hidden")
+      glyphs.play.classList.add("hidden")
+      glyphs.pause.classList.add("hidden")
+      return
+    } else {
+      glyphs.loader.classList.add("hidden")
+    }
+
+    if (app.isPlaying) {
+      glyphs.play.classList.add("hidden")
+      glyphs.pause.classList.remove("hidden")
+    } else {
+      glyphs.play.classList.remove("hidden")
+      glyphs.pause.classList.add("hidden")
+    }
+  },
+
+  updateUI: () => {
+    app.updatePlaybackUI()
+  },
 
   play: () => {
     app.isPlaying = true
     app.audioPlayer.play()
+    app.updateUI()
   },
 
   pause: () => {
     app.isPlaying = false
     app.audioPlayer.pause()
+    app.updateUI()
   },
 
   load: async () => {
