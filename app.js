@@ -1,23 +1,48 @@
 window.app = {
   isConverting: false,
   isPlaying: false,
-  audioURL: "",
+  audioLink: "",
   audioPlayer: document.querySelector("#audio-player"),
+  textArea: document.querySelector("#text-area"),
   clipboard: document.querySelector("#clipboard"),
   shareButton: document.querySelector("#share-button"),
   playbackButton: document.querySelector("#playback-button"),
-  defaultId: "534e49035",
+  defaultId: "ab5da2034",
   rootLink: "https://parayu.toolbomber.com/3/",
+  api: "https://parayu.toolbomber.com/api/tts/",
 
   handlePlayback: () => {
-    console.log("playback")
+    if (app.isConverting) {
+      return
+    }
 
-    app.isPlaying != app.isPlaying
+    if (app.isPlaying) {
+      app.pause()
+    } else {
+      app.play()
+    }
   },
 
   handleShare: () => {
-    console.log("share")
+    console.log(app.shareLink.get())
+    app.shareLink.copy()
   },
+
+  getAudioLink: async text => {
+    if (text.trim() === "") {
+      return
+    }
+
+    const encodedText = encodeURIComponent(text)
+
+    const link = await fetch(`${app.api}?text=${encodedText}`).then(r =>
+      r.text()
+    )
+
+    return link
+  },
+
+  loadAudio: link => (app.audioPlayer.src = link),
 
   getText: () => document.querySelector("#text-area").value,
 
@@ -27,7 +52,7 @@ window.app = {
     value: id => `${app.rootLink}?id=${id}`,
     get: () => app.clipboard.value,
     set: link => (app.clipboard.value = link),
-    copy: async () => await navigator.clipboard.writetext(app.clipboard),
+    copy: async () => await navigator.clipboard.writeText(app.clipboard.value),
   },
 
   updateAddressWithShareLink: link => window.history.pushState(null, "", link),
@@ -74,6 +99,18 @@ window.app = {
     return hashHex
   },
 
+  updateShareLinkUI: () => {
+    if (app.isConverting) {
+      app.shareButton.classList.remove("opacity-90")
+      app.shareButton.classList.remove("cursor-pointer")
+      app.shareButton.classList.add("opacity-60")
+    } else {
+      app.shareButton.classList.remove("opacity-60")
+      app.shareButton.classList.add("opacity-90")
+      app.shareButton.classList.add("cursor-pointer")
+    }
+  },
+
   updatePlaybackUI: () => {
     const glyphs = {}
     glyphs.play = document.querySelector("#svg-play")
@@ -102,9 +139,19 @@ window.app = {
 
   updateUI: () => {
     app.updatePlaybackUI()
+    app.updateShareLinkUI()
   },
 
-  play: () => {
+  play: async () => {
+    app.isConverting = true
+    app.updateUI()
+
+    const link = await app.getAudioLink(app.getText())
+    app.audioPlayer.src = link
+
+    app.isConverting = false
+    app.updateUI()
+
     app.isPlaying = true
     app.audioPlayer.play()
     app.updateUI()
@@ -130,7 +177,22 @@ window.app = {
     const id = await app.saveText(text)
     const shareLink = app.shareLink.value(id)
     app.shareLink.set(shareLink)
+
+    return shareLink
   },
 
-  initialize: () => {},
+  setListeners: () => {
+    app.audioPlayer.addEventListener("ended", () => {
+      app.isPlaying = false
+      app.updateUI()
+    })
+  },
+
+  initialize: () => {
+    app.load()
+    app.setListeners()
+    app.updateUI()
+  },
 }
+
+app.initialize()
