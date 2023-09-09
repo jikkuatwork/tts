@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="description" content="Simple text to speech" />
+    <meta name="theme-color" content="#000" />
+
+    <title>Parayu</title>
+
+    <link tag="link" rel="manifest" href="/manifest.json" />
+    <link rel="canonical" href="Parayu" />
+
+    <link
+      tag="link"
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="https://parayu.toolbomber.com/assets/logo.png"
+    />
+
+    <meta tag="meta" property="og:title" content="Parayu" />
+    <meta tag="meta" property="og:site_name" content="Parayu" />
+    <meta
+      tag="meta"
+      property="og:url"
+      content="https://parayu.toolbomber.com"
+    />
+    <meta
+      tag="meta"
+      property="og:description"
+      content="Simple text to speech"
+    />
+    <meta tag="meta" property="og:type" content="product" />
+    <meta
+      tag="meta"
+      property="og:image"
+      content="https://parayu.toolbomber.com/assets/social_preview.png"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Parayu" />
+    <meta name="twitter:description" content="Simple text to speech" />
+    <meta
+      name="twitter:image"
+      content="https://parayu.toolbomber.com/assets/social_preview.png"
+    />
+
+    <script src="https://cdn.toolbomber.com/js/WebArray.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+    />
+    <link rel="stylesheet" href="https://cdn.toolbomber.com/css/tw.css" />
+  </head>
+  <body>
+    <div class="page bg-dark-200 c">
+      <div class="w-full min-h-screen max-w-3xl bg-dark-200 flex py-16 p-4">
+        <div
+          class="container flex-grow flex flex-col rounded-lg overflow-hidden border border-opacity-20"
+        >
+          <audio
+            id="audio-player"
+            class="hidden"
+            src="audioURL"
+            preload="auto"
+          ></audio>
+          <textarea
+            id="text-area"
+            class="resize-none flex-grow p-4 shadow-inner bg-dark-200 text-white text-opacity-70 text-2xl font-light"
+            placeholder="Add text here.."
+          ></textarea>
+          <div class="controls flex w-full justify-between">
+            <div
+              id="playback-button"
+              class="play-pause-wait p-4 cursor-pointer opacity-90"
+            >
+              <svg
+                id="svg-pause"
+                class="animate__animated animate__bounce hidden"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10 4H6V20H10V4Z"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M18 4H14V20H18V4Z"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <svg
+                id="svg-play"
+                class="hidden"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 3L19 12L5 21V3Z"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <svg
+                id="svg-loader"
+                width="24"
+                height="24"
+                class="circular-loader"
+                viewBox="0 0 24 24"
+                stroke="white"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <style>
+                  .circular-loader {
+                    -webkit-animation: rotate 2s linear infinite;
+                    animation: rotate 2s linear infinite;
+                    -webkit-transform-origin: center center;
+                    -ms-transform-origin: center center;
+                    transform-origin: center center;
+                    margin: auto;
+                  }
+
+                  .loader-path {
+                    stroke-dasharray: 150, 200;
+                    stroke-dashoffset: -10;
+                    -webkit-animation: dash 1.5s ease-in-out infinite;
+                    animation: dash 1.5s ease-in-out infinite;
+                    stroke-linecap: round;
+                  }
+
+                  @-webkit-keyframes rotate {
+                    100% {
+                      -webkit-transform: rotate(360deg);
+                      transform: rotate(360deg);
+                    }
+                  }
+
+                  @keyframes rotate {
+                    100% {
+                      -webkit-transform: rotate(360deg);
+                      transform: rotate(360deg);
+                    }
+                  }
+
+                  @-webkit-keyframes dash {
+                    0% {
+                      stroke-dasharray: 1, 200;
+                      stroke-dashoffset: 0;
+                    }
+
+                    50% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -35;
+                    }
+
+                    100% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -124;
+                    }
+                  }
+
+                  @keyframes dash {
+                    0% {
+                      stroke-dasharray: 1, 200;
+                      stroke-dashoffset: 0;
+                    }
+
+                    50% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -35;
+                    }
+
+                    100% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -124;
+                    }
+                  }
+                  }
+                </style>
+                <circle
+                  class="loader-path"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  fill="none"
+                />
+              </svg>
+            </div>
+            <div
+              id="share-button"
+              onclick="copyTextToClipboard()"
+              class="p-4 opacity-90 cursor-pointer"
+            >
+              <input
+                type="text"
+                id="clipboard"
+                class="hidden"
+                value="https://parayu.toolbomber.com/"
+              />
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke="white"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 12V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V12"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M16 6L12 2L8 6"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M12 2V15"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script rel="" src="/app.js"></script>
+  <script>
+    window.va =
+      window.va ||
+      function () {
+        ;(window.vaq = window.vaq || []).push(arguments)
+      }
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</html>
