@@ -53,20 +53,59 @@
       <div class="w-full min-h-screen max-w-3xl bg-dark-200 flex py-16 p-4">
         <div
           x-data="{
-              isPlaying: true,
-              isConverting: true,
+              isPlaying: false,
+              isConverting: false,
+              isTextFieldEmpty: true,
+              audioURL: 'https://bff.listnr.tech/backend/audio/get/201103a7-5870-43ef-94c5-4b27726e806d_gc.mp3'
             }"
           class="container flex-grow flex flex-col rounded-lg overflow-hidden border border-opacity-20"
         >
+          <audio
+            id="audio-player"
+            class="hidden"
+            x-bind:src="audioURL"
+            preload="auto"
+          ></audio>
           <textarea
-            class="resize-none flex-grow p-4 shadow-inner bg-dark-200 text-white text-opacity-80"
+            class="resize-none flex-grow p-4 shadow-inner bg-dark-200 text-white text-opacity-70 text-2xl font-light"
             placeholder="Click play for instructions"
           ></textarea>
           <div
             class="controls flex bg-whitex w-full bg-opacity-30 justify-between"
           >
             <div
-              x-bind:class="!isConverting ? 'play-pause-wait p-4 cursor-pointer' : 'p-4 opacity-30'"
+              x-bind:class="!isConverting ? 'play-pause-wait p-4 cursor-pointer' : 'p-4'"
+              @click="async () => {
+                  const textArea = document.querySelector('textarea')
+                  const text = textArea.value
+
+                  if (text.trim() === '') {
+                    return
+                  }
+
+                  console.log(text)
+                  isConverting = true
+
+                  const encodedText = encodeURIComponent(text)
+
+                  const link = await fetch(
+                    `https://parayu.toolbomber.com/api/tts?text=${encodedText}`
+                  ).then(r => r.text())
+
+                  await getShareLink(text)
+
+                  audioPlayer.src = link
+                  play()
+                  isConverting = false
+                  isPlaying = true
+
+                  audioPlayer.addEventListener('ended', () => {
+                    isPlaying = false
+                  })
+
+                  return link
+                }
+                "
             >
               <svg
                 x-cloak
@@ -199,8 +238,16 @@
               </svg>
             </div>
             <div
+              id="share-button"
               x-bind:class="isConverting ? 'share p-4 opacity-30' : 'p-4 cursor-pointer opacity-80'"
+              onclick="copyTextToClipboard()"
             >
+              <input
+                type="text"
+                id="clipboard"
+                class="hidden"
+                value="https://parayu.toolbomber.com/"
+              />
               <svg
                 width="24"
                 height="24"
@@ -233,5 +280,121 @@
         </div>
       </div>
     </div>
+    <script>
+      const shareLink = id => `https://parayu.toolbomber.com/?id=${id}`
+
+      async function copyTextToClipboard() {
+        const textToCopy = document.getElementById("clipboard")
+        try {
+          await navigator.clipboard.writeText(textToCopy.value)
+        } catch (err) {
+          console.error("Failed to copy text: ", err)
+        }
+      }
+
+      function getQueryParameters() {
+        const queryString = window.location.search
+        const queryParams = {}
+
+        if (queryString) {
+          const keyValuePairs = queryString.slice(1).split("&")
+
+          keyValuePairs.forEach(pair => {
+            const [key, value] = pair.split("=")
+            queryParams[decodeURIComponent(key)] = decodeURIComponent(
+              value || ""
+            )
+          })
+        }
+
+        return queryParams
+      }
+
+      window.getText = async id => {
+        const wa = new WebArray({ read: id })
+        const array = await wa.read()
+        const text = array[array.length - 1]
+
+        return text
+      }
+
+      window.audioPlayer = document.querySelector("#audio-player")
+
+      window.getAudio = async () => {
+        console.log("getAudio")
+        const textArea = document.querySelector("textarea")
+        const text = textArea.value
+
+        if (text.trim() === "") {
+          return
+        }
+
+        const encodedText = encodeURIComponent(text)
+
+        const link = await fetch(
+          `https://parayu.toolbomber.com/api/tts?text=${encodedText}`
+        ).then(r => r.text())
+
+        audioPlayer.src = link
+        play()
+
+        return link
+      }
+
+      window.play = () => {
+        audioPlayer.play()
+      }
+
+      window.pause = () => {
+        audioPlayer.pause()
+      }
+
+      window.getShareLink = async text => {
+        const seed = await getHash(text)
+        const wa = await WebArray.create(seed)
+        wa.append(text)
+        const id = wa.keys.read
+
+        const shareLink = `https://parayu.toolbomber.com/?id=${id}`
+        console.log(shareLink)
+
+        return shareLink
+      }
+
+      const updateShareLink = link => {
+        const clipboard = document.querySelector("#clipboard")
+        clipboard.value = link
+        window.history.pushState(null, "", link)
+      }
+
+      async function getHash(text) {
+        const encoder = new TextEncoder()
+        const data = encoder.encode(text)
+        const hashBuffer = await crypto.subtle.digest("SHA-256", data)
+        const hashArray = Array.from(new Uint8Array(hashBuffer))
+        const hashHex = hashArray
+          .map(b => b.toString(16).padStart(2, "0"))
+          .join("")
+        return hashHex
+      }
+
+      const initialize = async () => {
+        const id = getQueryParameters()["id"] || "53c78c032"
+        console.log(id)
+
+        const text = await getText(id)
+        console.log(text)
+
+        const textArea = document.querySelector("textarea")
+        textArea.value = text
+
+        const link = shareLink(id)
+        console.log(link)
+
+        updateShareLink(link)
+      }
+
+      initialize()
+    </script>
   </body>
 </html>
