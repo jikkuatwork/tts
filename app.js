@@ -186,7 +186,6 @@ window.app = {
   },
 
   refreshAddress: link => {
-    app.clipboard.value = link
     window.history.pushState(null, "", link)
   },
 
