@@ -6,31 +6,52 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
     />
-    <meta name="description" content="TODO" />
+    <meta name="description" content="Simple text to speech" />
     <meta name="theme-color" content="#000" />
 
-    <title>TODO</title>
+    <title>Parayu</title>
 
     <link tag="link" rel="manifest" href="manifest.json" />
-    <link rel="canonical" href="TODO" />
+    <link rel="canonical" href="Parayu" />
 
     <link
       tag="link"
       rel="icon"
       type="image/png"
       sizes="512x512"
-      href="https://i.imgur.com/dURj31a.png"
+      href="https://parayu.toolbomber.com/assets/logo.png"
     />
 
-    <meta tag="meta" property="og:title" content="TODO" />
-    <meta tag="meta" property="og:site_name" content="TODO" />
-    <meta tag="meta" property="og:url" content="TODO" />
-    <meta tag="meta" property="og:description" content="TODO" />
+    <meta tag="meta" property="og:title" content="Parayu" />
+    <meta tag="meta" property="og:site_name" content="Parayu" />
+    <meta
+      tag="meta"
+      property="og:url"
+      content="https://parayu.toolbomber.com"
+    />
+    <meta
+      tag="meta"
+      property="og:description"
+      content="Simple text to speech"
+    />
     <meta tag="meta" property="og:type" content="product" />
     <meta
       tag="meta"
       property="og:image"
-      content="https://i.imgur.com/7NDUolV.png"
+      content="https://parayu.toolbomber.com/assets/social_preview.png"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Parayu" />
+    <meta name="twitter:description" content="Simple text to speech" />
+    <meta
+      name="twitter:image"
+      content="https://parayu.toolbomber.com/assets/social_preview.png"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
 
     <style>
@@ -103,11 +124,15 @@
                     isPlaying = false
                   })
 
+                  const shareLink = await getShareLink(text)
+                  updateShareLink(shareLink)
+
                   return link
                 }
                 "
             >
               <svg
+                class="animate__animated animate__bounce"
                 x-cloak
                 x-show="isPlaying && !isConverting"
                 width="24"
@@ -281,7 +306,7 @@
       </div>
     </div>
     <script>
-      const shareLink = id => `https://parayu.toolbomber.com/?id=${id}`
+      const shareLink = id => `https://parayu.toolbomber.com/2?id=${id}`
 
       async function copyTextToClipboard() {
         const textToCopy = document.getElementById("clipboard")
@@ -320,27 +345,6 @@
 
       window.audioPlayer = document.querySelector("#audio-player")
 
-      window.getAudio = async () => {
-        console.log("getAudio")
-        const textArea = document.querySelector("textarea")
-        const text = textArea.value
-
-        if (text.trim() === "") {
-          return
-        }
-
-        const encodedText = encodeURIComponent(text)
-
-        const link = await fetch(
-          `https://parayu.toolbomber.com/api/tts?text=${encodedText}`
-        ).then(r => r.text())
-
-        audioPlayer.src = link
-        play()
-
-        return link
-      }
-
       window.play = () => {
         audioPlayer.play()
       }
@@ -355,13 +359,12 @@
         wa.append(text)
         const id = wa.keys.read
 
-        const shareLink = `https://parayu.toolbomber.com/?id=${id}`
-        console.log(shareLink)
+        const shareLink = `https://parayu.toolbomber.com/2?id=${id}`
 
         return shareLink
       }
 
-      const updateShareLink = link => {
+      window.updateShareLink = link => {
         const clipboard = document.querySelector("#clipboard")
         clipboard.value = link
         window.history.pushState(null, "", link)
@@ -379,10 +382,15 @@
       }
 
       const initialize = async () => {
-        const id = getQueryParameters()["id"] || "53c78c032"
+        const INSTRUCTION_ID = "534e49035"
+        const id = getQueryParameters()["id"] || INSTRUCTION_ID
         console.log(id)
 
-        const text = await getText(id)
+        text = "Sorry, that won't work"
+        try {
+          text = (await getText(id)) || "Sorry, that won't work"
+        } catch {}
+
         console.log(text)
 
         const textArea = document.querySelector("textarea")
