@@ -158,6 +158,8 @@ window.app = {
     app.isPlaying = true
     app.audioPlayer.play()
     app.updateUI()
+
+    app.save()
   },
 
   pause: () => {
@@ -181,7 +183,14 @@ window.app = {
     const shareLink = app.shareLink.value(id)
     app.shareLink.set(shareLink)
 
+    app.refreshAddress(`/3/?id=${id}`)
+
     return shareLink
+  },
+
+  refreshAddress: link => {
+    app.clipboard.value = link
+    window.history.pushState(null, "", link)
   },
 
   setListeners: () => {
