@@ -23,9 +23,11 @@ window.app = {
     }
   },
 
-  handleShare: () => {
-    console.log(app.shareLink.get())
+  handleShare: async () => {
+    const shareLink = await app.shareLink.refresh()
     app.shareLink.copy()
+
+    console.log(shareLink)
   },
 
   getAudioLink: async text => {
@@ -53,6 +55,7 @@ window.app = {
     get: () => app.clipboard.value,
     set: link => (app.clipboard.value = link),
     copy: async () => await navigator.clipboard.writeText(app.clipboard.value),
+    refresh: async () => await app.save(),
   },
 
   updateAddressWithShareLink: link => window.history.pushState(null, "", link),
