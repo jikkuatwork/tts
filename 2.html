@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="description" content="TODO" />
+    <meta name="theme-color" content="#000" />
+
+    <title>TODO</title>
+
+    <link tag="link" rel="manifest" href="manifest.json" />
+    <link rel="canonical" href="TODO" />
+
+    <link
+      tag="link"
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="https://i.imgur.com/dURj31a.png"
+    />
+
+    <meta tag="meta" property="og:title" content="TODO" />
+    <meta tag="meta" property="og:site_name" content="TODO" />
+    <meta tag="meta" property="og:url" content="TODO" />
+    <meta tag="meta" property="og:description" content="TODO" />
+    <meta tag="meta" property="og:type" content="product" />
+    <meta
+      tag="meta"
+      property="og:image"
+      content="https://i.imgur.com/7NDUolV.png"
+    />
+
+    <style>
+      [x-cloak] {
+        display: none;
+      }
+    </style>
+
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.toolbomber.com/js/WebArray.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+    />
+    <link rel="stylesheet" href="https://cdn.toolbomber.com/css/tw.css" />
+  </head>
+  <body>
+    <div class="page bg-dark-200 c">
+      <div class="w-full min-h-screen max-w-3xl bg-dark-200 flex py-16 p-4">
+        <div
+          x-data="{
+              isPlaying: true,
+              isConverting: true,
+            }"
+          class="container flex-grow flex flex-col rounded-lg overflow-hidden border border-opacity-20"
+        >
+          <textarea
+            class="resize-none flex-grow p-4 shadow-inner bg-dark-200 text-white text-opacity-80"
+            placeholder="Click play for instructions"
+          ></textarea>
+          <div
+            class="controls flex bg-whitex w-full bg-opacity-30 justify-between"
+          >
+            <div
+              x-bind:class="!isConverting ? 'play-pause-wait p-4 cursor-pointer' : 'p-4 opacity-30'"
+            >
+              <svg
+                x-cloak
+                x-show="isPlaying && !isConverting"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10 4H6V20H10V4Z"
+                  stroke="rgba(255, 255, 255, 0.85)"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M18 4H14V20H18V4Z"
+                  stroke="rgba(255, 255, 255, 0.85)"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <svg
+                x-cloak
+                x-show="!isPlaying && !isConverting"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 3L19 12L5 21V3Z"
+                  stroke="rgba(255, 255, 255, 0.85)"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <svg
+                x-cloak
+                x-show="isConverting"
+                width="24"
+                height="24"
+                class="circular-loader"
+                viewBox="0 0 24 24"
+                stroke="white"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <style>
+                  .circular-loader {
+                    -webkit-animation: rotate 2s linear infinite;
+                    animation: rotate 2s linear infinite;
+                    -webkit-transform-origin: center center;
+                    -ms-transform-origin: center center;
+                    transform-origin: center center;
+                    margin: auto;
+                  }
+
+                  .loader-path {
+                    stroke-dasharray: 150, 200;
+                    stroke-dashoffset: -10;
+                    -webkit-animation: dash 1.5s ease-in-out infinite;
+                    animation: dash 1.5s ease-in-out infinite;
+                    stroke-linecap: round;
+                  }
+
+                  @-webkit-keyframes rotate {
+                    100% {
+                      -webkit-transform: rotate(360deg);
+                      transform: rotate(360deg);
+                    }
+                  }
+
+                  @keyframes rotate {
+                    100% {
+                      -webkit-transform: rotate(360deg);
+                      transform: rotate(360deg);
+                    }
+                  }
+
+                  @-webkit-keyframes dash {
+                    0% {
+                      stroke-dasharray: 1, 200;
+                      stroke-dashoffset: 0;
+                    }
+
+                    50% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -35;
+                    }
+
+                    100% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -124;
+                    }
+                  }
+
+                  @keyframes dash {
+                    0% {
+                      stroke-dasharray: 1, 200;
+                      stroke-dashoffset: 0;
+                    }
+
+                    50% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -35;
+                    }
+
+                    100% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -124;
+                    }
+                  }
+                  }
+                </style>
+                <circle
+                  class="loader-path"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  fill="none"
+                />
+              </svg>
+            </div>
+            <div
+              x-bind:class="isConverting ? 'share p-4 opacity-30' : 'p-4 cursor-pointer opacity-80'"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke="white"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 12V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V12"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M16 6L12 2L8 6"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M12 2V15"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
