@@ -152,9 +152,6 @@ window.app = {
     const link = await app.getAudioLink(app.getText())
     app.audioPlayer.src = link
 
-    app.isConverting = false
-    app.updateUI()
-
     app.isPlaying = true
     app.audioPlayer.play()
     app.updateUI()
@@ -196,6 +193,11 @@ window.app = {
   setListeners: () => {
     app.audioPlayer.addEventListener("ended", () => {
       app.isPlaying = false
+      app.updateUI()
+    })
+
+    app.audioPlayer.addEventListener("canplaythrough", () => {
+      app.isConverting = false
       app.updateUI()
     })
   },
