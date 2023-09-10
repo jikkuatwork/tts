@@ -11,7 +11,7 @@
 
     <title>Parayu</title>
 
-    <link tag="link" rel="manifest" href="manifest.json" />
+    <link tag="link" rel="manifest" href="/manifest.json" />
     <link rel="canonical" href="Parayu" />
 
     <link
@@ -49,137 +49,315 @@
       content="https://parayu.toolbomber.com/assets/social_preview.png"
     />
 
-    <script src="https://unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.toolbomber.com/js/WebArray.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
 
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
     />
-    <style>
-      [x-cloak] {
-        display: none;
-      }
-    </style>
     <link rel="stylesheet" href="https://cdn.toolbomber.com/css/tw.css" />
   </head>
   <body>
-    <div
-      x-data="{ isConverting: false, isPlaying: false, audioURL: 'https://bff.listnr.tech/backend/audio/get/201103a7-5870-43ef-94c5-4b27726e806d_gc.mp3', placeholder: 'Press play for instructions! ☝️' }"
-      class="page bg-dark-200 c"
-    >
-      <audio
-        id="audio-player"
-        class="hidden"
-        x-bind:src="audioURL"
-        preload="auto"
-      ></audio>
+    <div class="page bg-dark-200 c">
       <div
-        class="w-full h-screen max-w-3xl bg-dark-200 flex flex-col justify-end px-4 py-24 gap-4"
+        class="w-full min-h-screen max-w-3xl bg-dark-200 flex flex-col py-32 md:py-16 p-4"
       >
-        <div class="h-full bg-gray-800 rounded-lg overflow-hidden">
-          <div
-            class="history-card flex-col h-full c p-4 bg-gray-100 cursor-pointer hover:bg-white t relative"
-            @click="!isPlaying ? play() : stop() ; isPlaying = !isPlaying; placeholder = 'Paste text here..' ; "
-          >
+        <div
+          class="container flex-grow flex flex-col rounded-lg overflow-hidden border border-opacity-20"
+        >
+          <audio id="audio-player" class="hidden" src="" preload="auto"></audio>
+          <textarea
+            id="text-area"
+            class="resize-none flex-grow p-4 shadow-inner bg-dark-200 text-white text-opacity-70 text-2xl font-light"
+            placeholder="Add text here.."
+          ></textarea>
+          <div class="controls flex w-full justify-between">
             <div
-              id="play-pause-animation"
-              class="play-button mr-4 h-48 w-48 p-1"
-            ></div>
-            <div
-              class="meta text-xs text-black text-opacity-60 absolute bottom-4 hidden"
+              id="playback-button"
+              onclick="app.handlePlayback()"
+              class="play-pause-wait p-4 cursor-pointer opacity-90"
             >
-              just now
+              <svg
+                id="svg-pause"
+                class="animate__animated animate__bounce hidden"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10 4H6V20H10V4Z"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M18 4H14V20H18V4Z"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <svg
+                id="svg-play"
+                class="hidden"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 3L19 12L5 21V3Z"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <svg
+                id="svg-loader"
+                width="24"
+                height="24"
+                class="circular-loader"
+                viewBox="0 0 24 24"
+                stroke="white"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <style>
+                  .circular-loader {
+                    -webkit-animation: rotate 2s linear infinite;
+                    animation: rotate 2s linear infinite;
+                    -webkit-transform-origin: center center;
+                    -ms-transform-origin: center center;
+                    transform-origin: center center;
+                    margin: auto;
+                  }
+
+                  .loader-path {
+                    stroke-dasharray: 150, 200;
+                    stroke-dashoffset: -10;
+                    -webkit-animation: dash 1.5s ease-in-out infinite;
+                    animation: dash 1.5s ease-in-out infinite;
+                    stroke-linecap: round;
+                  }
+
+                  @-webkit-keyframes rotate {
+                    100% {
+                      -webkit-transform: rotate(360deg);
+                      transform: rotate(360deg);
+                    }
+                  }
+
+                  @keyframes rotate {
+                    100% {
+                      -webkit-transform: rotate(360deg);
+                      transform: rotate(360deg);
+                    }
+                  }
+
+                  @-webkit-keyframes dash {
+                    0% {
+                      stroke-dasharray: 1, 200;
+                      stroke-dashoffset: 0;
+                    }
+
+                    50% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -35;
+                    }
+
+                    100% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -124;
+                    }
+                  }
+
+                  @keyframes dash {
+                    0% {
+                      stroke-dasharray: 1, 200;
+                      stroke-dashoffset: 0;
+                    }
+
+                    50% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -35;
+                    }
+
+                    100% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -124;
+                    }
+                  }
+                  }
+                </style>
+                <circle
+                  class="loader-path"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  fill="none"
+                />
+              </svg>
+            </div>
+            <div
+              id="download-button"
+              onclick="app.handleDownload()"
+              class="p-4 opacity-90 cursor-pointer"
+            >
+              <svg
+                id="svg-loader-download"
+                width="24"
+                height="24"
+                class="circular-loader hidden"
+                viewBox="0 0 24 24"
+                stroke="white"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <style>
+                  .circular-loader {
+                    -webkit-animation: rotate 2s linear infinite;
+                    animation: rotate 2s linear infinite;
+                    -webkit-transform-origin: center center;
+                    -ms-transform-origin: center center;
+                    transform-origin: center center;
+                    margin: auto;
+                  }
+
+                  .loader-path {
+                    stroke-dasharray: 150, 200;
+                    stroke-dashoffset: -10;
+                    -webkit-animation: dash 1.5s ease-in-out infinite;
+                    animation: dash 1.5s ease-in-out infinite;
+                    stroke-linecap: round;
+                  }
+
+                  @-webkit-keyframes rotate {
+                    100% {
+                      -webkit-transform: rotate(360deg);
+                      transform: rotate(360deg);
+                    }
+                  }
+
+                  @keyframes rotate {
+                    100% {
+                      -webkit-transform: rotate(360deg);
+                      transform: rotate(360deg);
+                    }
+                  }
+
+                  @-webkit-keyframes dash {
+                    0% {
+                      stroke-dasharray: 1, 200;
+                      stroke-dashoffset: 0;
+                    }
+
+                    50% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -35;
+                    }
+
+                    100% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -124;
+                    }
+                  }
+
+                  @keyframes dash {
+                    0% {
+                      stroke-dasharray: 1, 200;
+                      stroke-dashoffset: 0;
+                    }
+
+                    50% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -35;
+                    }
+
+                    100% {
+                      stroke-dasharray: 89, 200;
+                      stroke-dashoffset: -124;
+                    }
+                  }
+                  }
+                </style>
+                <circle
+                  class="loader-path"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  fill="none"
+                />
+              </svg>
+              <svg
+                id="svg-download"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
+                />
+                <path d="M7 10L12 15L17 10" />
+                <path d="M12 15V3" />
+              </svg>
+            </div>
+            <div
+              id="share-button"
+              onclick="app.handleShare()"
+              class="p-4 opacity-90 cursor-pointer hidden"
+            >
+              <input
+                type="text"
+                id="clipboard"
+                class="hidden"
+                value="https://parayu.toolbomber.com/"
+              />
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10 13C10.4295 13.5741 10.9774 14.0492 11.6066 14.3929C12.2357 14.7367 12.9315 14.9411 13.6467 14.9923C14.3618 15.0435 15.0796 14.9404 15.7513 14.6898C16.4231 14.4392 17.0331 14.0471 17.54 13.54L20.54 10.54C21.4508 9.59699 21.9548 8.33397 21.9434 7.02299C21.932 5.71201 21.4061 4.45794 20.4791 3.5309C19.5521 2.60386 18.298 2.07802 16.987 2.06663C15.676 2.05523 14.413 2.55921 13.47 3.47L11.75 5.18"
+                />
+                <path
+                  d="M14 11C13.5706 10.4259 13.0227 9.95081 12.3935 9.60706C11.7643 9.2633 11.0685 9.05888 10.3534 9.00766C9.63822 8.95645 8.92043 9.05963 8.24867 9.31021C7.57691 9.5608 6.9669 9.95293 6.46002 10.46L3.46002 13.46C2.54923 14.403 2.04525 15.666 2.05665 16.977C2.06804 18.288 2.59388 19.542 3.52092 20.4691C4.44796 21.3961 5.70203 21.922 7.01301 21.9334C8.32399 21.9448 9.58701 21.4408 10.53 20.53L12.24 18.82"
+                />
+              </svg>
             </div>
           </div>
         </div>
-        <div class="h-1/2">
-          <textarea
-            id="text"
-            x-bind:placeholder="placeholder"
-            class="w-full p-4 h-full rounded-lg shadow-inner"
-          ></textarea>
-        </div>
         <div
-          class="w-full bg-yellow-300 h-32 rounded-lg c cursor-pointer"
-          @click="isConverting = !isConverting; if(isConverting) { await getAudio() ; isConverting = false }"
+          class="footer text-sm text-white text-opacity-60 hover:text-yellow-300 hover:text-opacity-90 t mt-4 c"
         >
-          <div
-            x-cloak
-            x-show="!isConverting"
-            class="open-sans text-3xl font-extralight uppercase tracking-wide"
-          >
-            Convert
-          </div>
-          <div x-cloak x-show="isConverting" class="w-8">
-            <div id="convert-animation"></div>
-          </div>
-        </div>
-        <div
-          class="footer tc text-white text-opacity-60 hover:text-opacity-80 c t text-xs"
-        >
-          <a href="https://twitter.com/jikkujose" target="blank">@jikkujose</a>
+          <a href="http://x.com/jikkujose" target="_blank">@jikkujose</a>
         </div>
       </div>
     </div>
   </body>
 
-  <script>
-    window.animationInstance = bodymovin.loadAnimation({
-      container: document.getElementById("convert-animation"),
-      path: "/convert.json",
-      renderer: "svg",
-      loop: true,
-      autoplay: true,
-    })
-
-    window.playPauseAnimation = bodymovin.loadAnimation({
-      container: document.getElementById("play-pause-animation"),
-      path: "/play-pause.json",
-      renderer: "svg",
-      loop: false,
-      autoplay: false,
-    })
-
-    window.audioPlayer = document.querySelector("#audio-player")
-
-    window.play = () => {
-      playPauseAnimation.setDirection(1)
-      playPauseAnimation.play()
-      audioPlayer.play()
-    }
-
-    window.stop = () => {
-      playPauseAnimation.setDirection(-1)
-      playPauseAnimation.play()
-      audioPlayer.pause()
-    }
-
-    window.getAudio = async () => {
-      const textArea = document.querySelector("textarea")
-      const text = textArea.value
-
-      if (text.trim() === "") {
-        return
-      }
-
-      const encodedText = encodeURIComponent(text)
-
-      const link = await fetch(
-        `https://parayu.toolbomber.com/api/tts?text=${encodedText}`
-      ).then(r => r.text())
-
-      audioPlayer.src = link
-      play()
-
-      return link
-    }
-
-    audioPlayer.addEventListener("ended", () => {
-      stop()
-    })
-  </script>
+  <script rel="" src="/app.js"></script>
   <script>
     window.va =
       window.va ||

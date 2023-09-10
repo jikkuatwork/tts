@@ -10,7 +10,7 @@ window.app = {
   playbackButton: document.querySelector("#playback-button"),
   filename: "parayu.mp3",
   defaultId: "b00a9c036",
-  internalRoute: "3",
+  internalRoute: "",
   rootLink: "https://parayu.toolbomber.com/3/",
   api: "https://parayu.toolbomber.com/api/tts/",
 
