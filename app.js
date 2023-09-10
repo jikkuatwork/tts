@@ -8,7 +8,8 @@ window.app = {
   shareButton: document.querySelector("#share-button"),
   playbackButton: document.querySelector("#playback-button"),
   filename: "parayu.mp3",
-  defaultId: "ab5da2034",
+  defaultId: "b00a9c036",
+  internalRoute: "3",
   rootLink: "https://parayu.toolbomber.com/3/",
   api: "https://parayu.toolbomber.com/api/tts/",
 
@@ -207,6 +208,7 @@ window.app = {
     app.setText(text)
 
     app.shareLink.set(shareLink)
+    app.refreshAddress(id)
   },
 
   save: async () => {
@@ -215,13 +217,13 @@ window.app = {
     const shareLink = app.shareLink.value(id)
     app.shareLink.set(shareLink)
 
-    app.refreshAddress(`/3/?id=${id}`)
+    app.refreshAddress(id)
 
     return shareLink
   },
 
-  refreshAddress: link => {
-    window.history.pushState(null, "", link)
+  refreshAddress: id => {
+    window.history.pushState(null, "", `/${app.internalRoute}/?id=${id}`)
   },
 
   setListeners: () => {
