@@ -7,9 +7,18 @@ window.app = {
   clipboard: document.querySelector("#clipboard"),
   shareButton: document.querySelector("#share-button"),
   playbackButton: document.querySelector("#playback-button"),
+  filename: "parayu.mp3",
   defaultId: "ab5da2034",
   rootLink: "https://parayu.toolbomber.com/3/",
   api: "https://parayu.toolbomber.com/api/tts/",
+
+  handleDownload: async () => {
+    const text = app.getText()
+    const audioLink = await app.getAudioLink(text)
+    app.loadAudio(audioLink)
+
+    app.downloadAudio(audioLink)
+  },
 
   handlePlayback: () => {
     if (app.isConverting) {
@@ -28,6 +37,32 @@ window.app = {
     app.shareLink.copy()
 
     console.log(shareLink)
+  },
+
+  downloadAudio: async (link, filename = app.filename) => {
+    try {
+      const response = await fetch(link)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const blob = await response.blob()
+      const blobUrl = URL.createObjectURL(blob)
+
+      const anchorElement = document.createElement("a")
+      anchorElement.href = blobUrl
+      anchorElement.download = filename
+      anchorElement.style.display = "none"
+      document.body.appendChild(anchorElement)
+      anchorElement.click()
+      document.body.removeChild(anchorElement)
+
+      // Release the Blob URL after a short delay
+      setTimeout(() => {
+        URL.revokeObjectURL(blobUrl)
+      }, 100)
+    } catch (error) {
+      console.error("Error downloading file:", error)
+    }
   },
 
   getAudioLink: async text => {
@@ -150,7 +185,7 @@ window.app = {
     app.updateUI()
 
     const link = await app.getAudioLink(app.getText())
-    app.audioPlayer.src = link
+    app.loadAudio(link)
 
     app.isPlaying = true
     app.audioPlayer.play()

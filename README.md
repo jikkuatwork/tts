@@ -12,3 +12,8 @@ Simple TTS.
 ## V2
 
 - [ ] play/pause/progress state management
+
+## v3
+
+- [ ] download file
+- [ ] notifications
