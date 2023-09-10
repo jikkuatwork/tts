@@ -15,5 +15,6 @@ Simple TTS.
 
 ## v3
 
-- [ ] download file
+- [x] download file
 - [ ] notifications
+- [x] download progress

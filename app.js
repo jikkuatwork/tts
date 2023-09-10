@@ -1,6 +1,7 @@
 window.app = {
   isConverting: false,
   isPlaying: false,
+  isDownloadProcessing: false,
   audioLink: "",
   audioPlayer: document.querySelector("#audio-player"),
   textArea: document.querySelector("#text-area"),
@@ -14,6 +15,9 @@ window.app = {
   api: "https://parayu.toolbomber.com/api/tts/",
 
   handleDownload: async () => {
+    app.isDownloadProcessing = true
+    app.updateUI()
+
     const text = app.getText()
     const audioLink = await app.getAudioLink(text)
     app.loadAudio(audioLink)
@@ -59,6 +63,8 @@ window.app = {
 
       // Release the Blob URL after a short delay
       setTimeout(() => {
+        app.isDownloadProcessing = false
+        app.updateUI()
         URL.revokeObjectURL(blobUrl)
       }, 100)
     } catch (error) {
@@ -176,9 +182,23 @@ window.app = {
     }
   },
 
+  updateDownloadUI: () => {
+    glyphs.loader = document.querySelector("#svg-loader-download")
+    glyphs.download = document.querySelector("#svg-download")
+
+    if (app.isDownloadProcessing) {
+      glyphs.loader.classList.remove("hidden")
+      glyphs.download.classList.add("hidden")
+    } else {
+      glyphs.loader.classList.add("hidden")
+      glyphs.download.classList.remove("hidden")
+    }
+  },
+
   updateUI: () => {
     app.updatePlaybackUI()
     app.updateShareLinkUI()
+    app.updateDownloadUI()
   },
 
   play: async () => {
