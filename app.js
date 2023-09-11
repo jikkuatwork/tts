@@ -2,6 +2,7 @@ window.app = {
   isConverting: false,
   isPlaying: false,
   isDownloadProcessing: false,
+  isMenuOpen: false,
   audioLink: "",
   audioPlayer: document.querySelector("#audio-player"),
   textArea: document.querySelector("#text-area"),
@@ -13,6 +14,7 @@ window.app = {
   internalRoute: "",
   rootLink: "https://parayu.toolbomber.com/3/",
   api: "https://parayu.toolbomber.com/api/tts/",
+  flipper: document.querySelector("#lottie-flip"),
 
   handleDownload: async () => {
     app.isDownloadProcessing = true
@@ -42,6 +44,40 @@ window.app = {
     app.shareLink.copy()
 
     console.log(shareLink)
+  },
+
+  handleDelete: () => {
+    console.log("delete")
+  },
+
+  handleMenu: () => {
+    app.toggleMenu()
+    app.flip()
+
+    app.isMenuOpen = !app.isMenuOpen
+  },
+
+  toggleMenu: () => {
+    let menuWidth = 50
+
+    if (!app.isMenuOpen) {
+      menuWidth = 168
+    }
+
+    const rightControl = document.querySelector("#right-control")
+
+    popmotion
+      .tween({
+        from: rightControl.offsetWidth,
+        to: menuWidth,
+        duration: 1000, // You can adjust the duration as needed
+        ease: popmotion.easing.easeInOut,
+      })
+      .start({
+        update: function (v) {
+          rightControl.style.width = v + "px"
+        },
+      })
   },
 
   downloadAudio: async (link, filename = app.filename) => {
@@ -244,6 +280,29 @@ window.app = {
 
   refreshAddress: id => {
     window.history.pushState(null, "", `/${app.internalRoute}/?id=${id}`)
+  },
+
+  flip: () => {
+    let from = 0
+    let to = 180
+
+    if (app.isMenuOpen) {
+      from = 180
+      to = 0
+    }
+
+    popmotion
+      .tween({
+        from,
+        to,
+        duration: 1000, // Adjust the duration as needed
+        ease: popmotion.easing.easeInOut,
+      })
+      .start({
+        update: function (v) {
+          app.flipper.style.transform = `rotate(${v}deg)`
+        },
+      })
   },
 
   setListeners: () => {
