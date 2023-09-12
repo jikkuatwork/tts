@@ -12,7 +12,7 @@ window.app = {
   filename: "parayu.mp3",
   defaultId: "b00a9c036",
   internalRoute: "",
-  rootLink: "https://parayu.toolbomber.com/3/",
+  rootLink: "https://parayu.toolbomber.com/",
   api: "https://parayu.toolbomber.com/api/tts/",
   flipper: document.querySelector("#lottie-flip"),
 
@@ -281,7 +281,7 @@ window.app = {
   },
 
   refreshAddress: id => {
-    window.history.pushState(null, "", `/${app.internalRoute}/?id=${id}`)
+    window.history.pushState(null, "", app.shareLink.value(id))
   },
 
   flip: () => {
