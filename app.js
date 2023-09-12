@@ -303,10 +303,28 @@ window.app = {
     })
   },
 
+  isDarkMode: () => {
+    return (isDarkMode =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches)
+  },
+
+  setThemeClasses: () => {
+    const footer = document.querySelector("footer")
+    const container = document.querySelector("#container")
+
+    if (app.isDarkMode()) {
+    } else {
+      footer.classList.add("hover:text-yellow-600")
+      container.classList.add("border-opacity-100")
+    }
+  },
+
   initialize: () => {
     app.load()
     app.setListeners()
     app.updateUI()
+    app.setThemeClasses()
   },
 }
 

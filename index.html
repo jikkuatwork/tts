@@ -65,6 +65,7 @@
         class="w-full min-h-screen max-w-3xl bg-theme flex flex-col py-32 md:py-16 p-4"
       >
         <div
+          id="container"
           class="container flex-grow flex flex-col rounded-lg overflow-hidden border border-opacity-20"
         >
           <audio id="audio-player" class="hidden" src="" preload="auto"></audio>
@@ -77,7 +78,7 @@
             <div
               id="playback-button"
               onclick="app.handlePlayback()"
-              class="play-pause-wait p-4 cursor-pointer opacity-80 hover:opacity-100 t"
+              class="play-pause-wait p-4 cursor-pointer opacity-70 hover:opacity-100 t"
             >
               <svg
                 id="svg-pause"
@@ -214,7 +215,7 @@
             >
               <div
                 id="menu-button"
-                class="py-4 px-2 opacity-80 hover:opacity-100 t"
+                class="py-4 px-2 opacity-70 hover:opacity-100 t"
                 style="min-width: 40px"
                 onclick="app.handleMenu()"
               >
@@ -241,7 +242,7 @@
                 <div
                   id="download-button"
                   onclick="app.handleDownload()"
-                  class="py-4 px-2 opacity-90 cursor-pointer opacity-80 hover:opacity-100 t"
+                  class="py-4 px-2 opacity-90 cursor-pointer opacity-70 hover:opacity-100 t"
                 >
                   <svg
                     id="svg-loader-download"
@@ -352,7 +353,7 @@
                 <div
                   id="share-button"
                   onclick="app.handleShare()"
-                  class="py-4 px-2 opacity-90 cursor-pointer opacity-80 hover:opacity-100 t"
+                  class="py-4 px-2 opacity-90 cursor-pointer opacity-70 hover:opacity-100 t"
                 >
                   <input
                     type="text"
@@ -382,7 +383,7 @@
                 <div
                   id="delete-button"
                   onclick="app.handleDelete()"
-                  class="py-4 px-2 mr-2 opacity-90 cursor-pointer opacity-80 hover:opacity-100 t"
+                  class="py-4 px-2 mr-2 opacity-90 cursor-pointer opacity-70 hover:opacity-100 t"
                 >
                   <input
                     type="text"
@@ -413,11 +414,11 @@
             </div>
           </div>
         </div>
-        <div
+        <footer
           class="footer text-sm text-theme text-opacity-60 hover:text-yellow-300 hover:text-opacity-90 t mt-4 c"
         >
           <a href="http://x.com/jikkujose" target="_blank">@jikkujose</a>
-        </div>
+        </footer>
       </div>
     </div>
   </body>
