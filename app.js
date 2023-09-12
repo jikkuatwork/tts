@@ -53,6 +53,7 @@ window.app = {
 
   handleMenu: () => {
     app.toggleMenu()
+    app.toggleOpacity()
     app.flip()
 
     app.isMenuOpen = !app.isMenuOpen
@@ -302,6 +303,30 @@ window.app = {
       .start({
         update: function (v) {
           app.flipper.style.transform = `rotate(${v}deg)`
+        },
+      })
+  },
+
+  toggleOpacity: () => {
+    const actionButtons = document.querySelector("#action-buttons")
+    let from = 0
+    let to = 1
+
+    if (app.isMenuOpen) {
+      from = 1
+      to = 0
+    }
+
+    popmotion
+      .tween({
+        from,
+        to,
+        duration: 1000, // Adjust the duration as needed
+        ease: popmotion.easing.easeInOut,
+      })
+      .start({
+        update: function (v) {
+          actionButtons.style.opacity = v
         },
       })
   },
