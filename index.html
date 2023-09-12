@@ -77,7 +77,7 @@
             <div
               id="playback-button"
               onclick="app.handlePlayback()"
-              class="play-pause-wait p-4 cursor-pointer opacity-90"
+              class="play-pause-wait p-4 cursor-pointer opacity-80 hover:opacity-100 t"
             >
               <svg
                 id="svg-pause"
@@ -125,7 +125,7 @@
                 height="24"
                 class="circular-loader"
                 viewBox="0 0 24 24"
-                stroke="white"
+                style="stroke: var(--stroke-color)"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
@@ -214,7 +214,7 @@
             >
               <div
                 id="menu-button"
-                class="py-4 px-2"
+                class="py-4 px-2 opacity-80 hover:opacity-100 t"
                 style="min-width: 40px"
                 onclick="app.handleMenu()"
               >
@@ -225,7 +225,7 @@
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
-                    stroke="white"
+                    style="stroke: var(--stroke-color)"
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -241,7 +241,7 @@
                 <div
                   id="download-button"
                   onclick="app.handleDownload()"
-                  class="py-4 px-2 opacity-90 cursor-pointer"
+                  class="py-4 px-2 opacity-90 cursor-pointer opacity-80 hover:opacity-100 t"
                 >
                   <svg
                     id="svg-loader-download"
@@ -249,7 +249,7 @@
                     height="24"
                     class="circular-loader hidden"
                     viewBox="0 0 24 24"
-                    stroke="white"
+                    style="stroke: var(--stroke-color)"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
@@ -335,7 +335,7 @@
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
-                    stroke="white"
+                    style="stroke: var(--stroke-color)"
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -352,7 +352,7 @@
                 <div
                   id="share-button"
                   onclick="app.handleShare()"
-                  class="py-4 px-2 opacity-90 cursor-pointer"
+                  class="py-4 px-2 opacity-90 cursor-pointer opacity-80 hover:opacity-100 t"
                 >
                   <input
                     type="text"
@@ -364,7 +364,7 @@
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
-                    stroke="white"
+                    style="stroke: var(--stroke-color)"
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -382,7 +382,7 @@
                 <div
                   id="delete-button"
                   onclick="app.handleDelete()"
-                  class="py-4 px-2 mr-2 opacity-90 cursor-pointer"
+                  class="py-4 px-2 mr-2 opacity-90 cursor-pointer opacity-80 hover:opacity-100 t"
                 >
                   <input
                     type="text"

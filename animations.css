@@ -43,12 +43,12 @@
 }
 
 .flip-animation {
-  animation: flip 0.5s ease-in-out;
+  animation: flip 0.3s ease-in-out;
   animation-fill-mode: forwards;
 }
 
 .flip-animation-reverse {
-  animation: flip-reverse 0.5s ease-in-out;
+  animation: flip-reverse 0.3s ease-in-out;
   animation-fill-mode: forwards;
 }
 
