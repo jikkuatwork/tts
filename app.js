@@ -48,6 +48,7 @@ window.app = {
 
   handleDelete: () => {
     console.log("delete")
+    app.textArea.value = ""
   },
 
   handleMenu: () => {
