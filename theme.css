@@ -1,0 +1,21 @@
+:root {
+  --stroke-color: rgba(0, 0, 0, 1);
+  --background-color: rgba(255, 255, 255, 1);
+  --text-color: rgba(0, 0, 0, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --stroke-color: rgba(255, 255, 255, 1);
+    --background-color: rgba(0, 0, 0, 1);
+    --text-color: rgba(255, 255, 255, 1);
+  }
+}
+
+.bg-theme {
+  background-color: var(--background-color);
+}
+
+.text-theme {
+  color: var(--text-color);
+}

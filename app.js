@@ -3,6 +3,7 @@ window.app = {
   isPlaying: false,
   isDownloadProcessing: false,
   isMenuOpen: false,
+  menuOpenSpeed: 500,
   audioLink: "",
   audioPlayer: document.querySelector("#audio-player"),
   textArea: document.querySelector("#text-area"),
@@ -69,7 +70,7 @@ window.app = {
       .tween({
         from: rightControl.offsetWidth,
         to: menuWidth,
-        duration: 1000, // You can adjust the duration as needed
+        duration: app.menuOpenSpeed, // You can adjust the duration as needed
         ease: popmotion.easing.easeInOut,
       })
       .start({
@@ -292,7 +293,7 @@ window.app = {
       .tween({
         from,
         to,
-        duration: 1000, // Adjust the duration as needed
+        duration: app.menuOpenSpeed, // Adjust the duration as needed
         ease: popmotion.easing.easeInOut,
       })
       .start({
