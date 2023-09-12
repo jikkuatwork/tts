@@ -58,26 +58,13 @@ window.app = {
   },
 
   toggleMenu: () => {
-    let menuWidth = 50
-
-    if (!app.isMenuOpen) {
-      menuWidth = 168
-    }
-
     const rightControl = document.querySelector("#right-control")
 
-    popmotion
-      .tween({
-        from: rightControl.offsetWidth,
-        to: menuWidth,
-        duration: app.menuOpenSpeed, // You can adjust the duration as needed
-        ease: popmotion.easing.easeInOut,
-      })
-      .start({
-        update: function (v) {
-          rightControl.style.width = v + "px"
-        },
-      })
+    if (app.isMenuOpen) {
+      rightControl.classList.remove("slide-out")
+    } else {
+      rightControl.classList.add("slide-out")
+    }
   },
 
   downloadAudio: async (link, filename = app.filename) => {
@@ -281,50 +268,27 @@ window.app = {
   },
 
   flip: () => {
-    let from = 0
-    let to = 180
+    const arrow = document.querySelector("#arrow")
 
     if (app.isMenuOpen) {
-      from = 180
-      to = 0
+      arrow.classList.remove("flip-animation")
+      arrow.classList.add("flip-animation-reverse")
+    } else {
+      arrow.classList.add("flip-animation")
+      arrow.classList.remove("flip-animation-reverse")
     }
-
-    popmotion
-      .tween({
-        from,
-        to,
-        duration: app.menuOpenSpeed, // Adjust the duration as needed
-        ease: popmotion.easing.easeInOut,
-      })
-      .start({
-        update: function (v) {
-          app.flipper.style.transform = `rotate(${v}deg)`
-        },
-      })
   },
 
   toggleOpacity: () => {
     const actionButtons = document.querySelector("#action-buttons")
-    let from = 0
-    let to = 1
 
     if (app.isMenuOpen) {
-      from = 1
-      to = 0
+      actionButtons.classList.add("disappear-animation")
+      actionButtons.classList.remove("appear-animation")
+    } else {
+      actionButtons.classList.add("appear-animation")
+      actionButtons.classList.remove("disappear-animation")
     }
-
-    popmotion
-      .tween({
-        from,
-        to,
-        duration: 1000, // Adjust the duration as needed
-        ease: popmotion.easing.easeInOut,
-      })
-      .start({
-        update: function (v) {
-          actionButtons.style.opacity = v
-        },
-      })
   },
 
   setListeners: () => {

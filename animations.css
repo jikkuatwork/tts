@@ -1,0 +1,63 @@
+.slide-in-out {
+  transition: width 0.5s ease-in-out;
+}
+
+.slide-out {
+  width: 168px !important;
+}
+
+@keyframes flip {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes disappear {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes flip-reverse {
+  0% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+
+.flip-animation {
+  animation: flip 0.5s ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.flip-animation-reverse {
+  animation: flip-reverse 0.5s ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.appear-animation {
+  animation: appear 0.7s linear;
+  animation-fill-mode: forwards;
+}
+
+.disappear-animation {
+  animation: disappear 0.7s linear;
+  animation-fill-mode: forwards;
+}
