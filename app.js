@@ -40,14 +40,11 @@ window.app = {
   },
 
   handleShare: async () => {
-    const shareLink = await app.shareLink.refresh()
+    await app.shareLink.refresh()
     app.shareLink.copy()
-
-    console.log(shareLink)
   },
 
   handleDelete: () => {
-    console.log("delete")
     app.textArea.value = ""
   },
 
@@ -137,8 +134,6 @@ window.app = {
     copy: async () => await navigator.clipboard.writeText(app.clipboard.value),
     refresh: async () => await app.save(),
   },
-
-  updateAddressWithShareLink: link => window.history.pushState(null, "", link),
 
   getQueryValueOf: key => {
     const queryString = window.location.search
@@ -281,7 +276,7 @@ window.app = {
   },
 
   refreshAddress: id => {
-    window.history.pushState(null, "", app.shareLink.value(id))
+    window.history.pushState(null, "", `/?id=${id}`)
   },
 
   flip: () => {
