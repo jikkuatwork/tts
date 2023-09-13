@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="description" content="Parayu" />
+    <meta name="theme-color" content="#000" />
+
+    <title>Parayu</title>
+
+    <link tag="link" rel="manifest" href="manifest.json" />
+    <link rel="canonical" href="Parayu" />
+
+    <link
+      tag="link"
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="https://i.imgur.com/dURj31a.png"
+    />
+
+    <meta tag="meta" property="og:title" content="Parayu" />
+    <meta tag="meta" property="og:site_name" content="Parayu" />
+    <meta tag="meta" property="og:url" content="Parayu" />
+    <meta tag="meta" property="og:description" content="Parayu" />
+    <meta tag="meta" property="og:type" content="product" />
+    <meta
+      tag="meta"
+      property="og:image"
+      content="https://i.imgur.com/7NDUolV.png"
+    />
+
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.toolbomber.com/js/WebArray.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+    />
+    <link rel="stylesheet" href="https://cdn.toolbomber.com/css/tw.css" />
+  </head>
+  <body>
+    <div class="page bg-dark-100 c">
+      <div class="w-full h-screen max-w-3xl fc c bg-dark-200">
+        <div
+          class="p-6 text-3xl bg-yellow-300 rounded-lg text-opacity-80 cursor-pointer hover:bg-yellow-400 t"
+        >
+          <a
+            href="javascript:(function()%7Bconst%20app%20%3D%20%7B%0A%20%20api%3A%20%22https%3A%2F%2Fparayu.toolbomber.com%2Fapi%2Ftts%2F%22%2C%0A%20%20isPlaying%3A%20false%2C%0A%0A%20%20chatBubbles%3A%20()%20%3D%3E%20%7B%0A%20%20%20%20const%20bubbles%20%3D%20document.querySelectorAll(%22.message-body%22)%0A%20%20%20%20return%20bubbles%0A%20%20%7D%2C%0A%0A%20%20attachHandlers%3A%20()%20%3D%3E%20%7B%0A%20%20%20%20app.chatBubbles().forEach(n%20%3D%3E%20%7B%0A%20%20%20%20%20%20n.style%20%3D%20%22cursor%3A%20pointer%22%0A%20%20%20%20%20%20const%20text%20%3D%20n.innerText%0A%20%20%20%20%20%20n.onclick%20%3D%20()%20%3D%3E%20app.play(text)%0A%20%20%20%20%7D)%0A%20%20%7D%2C%0A%0A%20%20getAudioLink%3A%20async%20text%20%3D%3E%20%7B%0A%20%20%20%20if%20(text.trim()%20%3D%3D%3D%20%22%22)%20%7B%0A%20%20%20%20%20%20return%0A%20%20%20%20%7D%0A%0A%20%20%20%20const%20encodedText%20%3D%20encodeURIComponent(text)%0A%0A%20%20%20%20const%20link%20%3D%20await%20fetch(%60%24%7Bapp.api%7D%3Ftext%3D%24%7BencodedText%7D%60).then(r%20%3D%3E%0A%20%20%20%20%20%20r.text()%0A%20%20%20%20)%0A%0A%20%20%20%20return%20link%0A%20%20%7D%2C%0A%0A%20%20createAudioPlayer%3A%20()%20%3D%3E%20%7B%0A%20%20%20%20const%20audioElement%20%3D%20document.createElement(%22audio%22)%0A%20%20%20%20audioElement.setAttribute(%22src%22%2C%20%22%22)%0A%20%20%20%20audioElement.setAttribute(%22autoplay%22%2C%20true)%0A%20%20%20%20audioElement.setAttribute(%22preload%22%2C%20%22auto%22)%0A%20%20%20%20audioElement.setAttribute(%22controls%22%2C%20true)%0A%20%20%20%20audioElement.style%20%3D%20%22display%3A%20none%22%0A%0A%20%20%20%20document.body.appendChild(audioElement)%0A%20%20%20%20app.audioPlayer%20%3D%20audioElement%0A%20%20%7D%2C%0A%0A%20%20play%3A%20async%20text%20%3D%3E%20%7B%0A%20%20%20%20if%20(app.isPlaying)%20%7B%0A%20%20%20%20%20%20return%0A%20%20%20%20%7D%0A%0A%20%20%20%20const%20audioURL%20%3D%20await%20app.getAudioLink(text)%0A%20%20%20%20app.audioPlayer.src%20%3D%20audioURL%0A%20%20%20%20app.isPlaying%20%3D%20true%0A%0A%20%20%20%20app.audioPlayer.addEventListener(%22ended%22%2C%20()%20%3D%3E%20%7B%0A%20%20%20%20%20%20app.isPlaying%20%3D%20false%0A%20%20%20%20%7D)%0A%20%20%7D%2C%0A%0A%20%20initialize%3A%20()%20%3D%3E%20%7B%0A%20%20%20%20app.attachHandlers()%0A%20%20%20%20app.createAudioPlayer()%0A%20%20%7D%2C%0A%7D%0Aapp.initialize()%7D)()%3B"
+            >Parayu</a
+          >
+        </div>
+        <div class="p-2 text-white text-opacity-70">
+          Drag & Drop to your bookmarks bar.
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
