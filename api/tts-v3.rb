@@ -1,10 +1,12 @@
 require 'bundler/setup'
 require 'rack'
+require 'net/http'
+require 'uri'
 require_relative "../TTS.rb"
 
 Handler = Proc.new do |env|
   req = Rack::Request.new(env)
-  text = req.query['text'] || 'Hello World'
+  text = req.params['text'] || 'Hello World'
   decoded_text = URI.decode_www_form_component(text)
   tts = TTS.new(decoded_text)
   download_link = tts.download_link
@@ -28,9 +30,9 @@ Handler = Proc.new do |env|
 
     res['Content-Type'] = 'audio/mpeg'
     res['Content-Disposition'] = "attachment; filename=\"parayu.mp3\""
-    res['Content-Length'] = mp3_data.bytesize.to_s # Use bytesize of mp3_data
-    res.write mp3_data # Use Rack::Response#write to set the response body
-    res.finish # Call finish to finalize the response
+    res['Content-Length'] = mp3_data.bytesize.to_s
+    res.write mp3_data
+    res.finish
   else
     res = Rack::Response.new
     res.status = 500
