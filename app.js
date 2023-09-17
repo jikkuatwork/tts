@@ -102,19 +102,13 @@ window.app = {
 
     const encodedText = encodeURIComponent(text)
 
-    // Fetch the Base64 string from the API
-    const base64Mp3Data = await fetch(`${app.api}?text=${encodedText}`).then(
-      r => r.text()
+    // Fetch the audio data from the API
+    const audioData = await fetch(`${app.api}-v2?text=${encodedText}`).then(r =>
+      r.arrayBuffer()
     )
 
-    // Convert the Base64 string to a Blob
-    const byteCharacters = atob(base64Mp3Data)
-    const byteNumbers = new Array(byteCharacters.length)
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i)
-    }
-    const byteArray = new Uint8Array(byteNumbers)
-    const blob = new Blob([byteArray], { type: "audio/mpeg" })
+    // Create a Blob from the ArrayBuffer
+    const blob = new Blob([audioData], { type: "audio/mpeg" })
 
     // Create a Blob URL
     const blobUrl = URL.createObjectURL(blob)
