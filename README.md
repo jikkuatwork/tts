@@ -4,7 +4,10 @@ Simple TTS.
 
 ## Todo
 
-- [ ] dark mode
-- [ ] hover effects
+- [x] dark mode
+- [x] hover effects
 - [ ] mobile brave
 - [ ] notifications
+- [ ] copy link in mobile
+- [ ] Telegram bot
+- [ ] Clear URL on delete
