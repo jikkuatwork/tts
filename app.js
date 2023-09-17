@@ -14,7 +14,7 @@ window.app = {
   defaultId: "b00a9c036",
   internalRoute: "",
   rootLink: "https://parayu.toolbomber.com/",
-  api: "https://parayu.toolbomber.com/api/tts/",
+  api: "https://parayu.toolbomber.com/api/tts",
   flipper: document.querySelector("#lottie-flip"),
 
   handleDownload: async () => {
@@ -102,6 +102,33 @@ window.app = {
 
     const encodedText = encodeURIComponent(text)
 
+    // Fetch the Base64 string from the API
+    const base64Mp3Data = await fetch(`${app.api}-v2?text=${encodedText}`).then(
+      r => r.text()
+    )
+
+    // Convert the Base64 string to a Blob
+    const byteCharacters = atob(base64Mp3Data)
+    const byteNumbers = new Array(byteCharacters.length)
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i)
+    }
+    const byteArray = new Uint8Array(byteNumbers)
+    const blob = new Blob([byteArray], { type: "audio/mpeg" })
+
+    // Create a Blob URL
+    const blobUrl = URL.createObjectURL(blob)
+
+    return blobUrl
+  },
+
+  getAudioLink2: async text => {
+    if (text.trim() === "") {
+      return
+    }
+
+    const encodedText = encodeURIComponent(text)
+
     const link = await fetch(`${app.api}?text=${encodedText}`).then(r =>
       r.text()
     )
@@ -150,7 +177,7 @@ window.app = {
   saveText: async text => {
     const seed = await app.getHash(text)
     const wa = await WebArray.create(seed)
-    wa.append(text)
+    wa.replace(text)
     const id = wa.keys.read
 
     return id
