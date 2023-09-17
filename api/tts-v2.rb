@@ -21,6 +21,11 @@ Handler = Proc.new do |req, res|
   if mp3_data
     base64_mp3_data = Base64.strict_encode64(mp3_data)
     res.status = 200
+  # res["Content-Type"] = "text/text; charset=utf-8"
+    res["Access-Control-Allow-Origin"] = "*"
+    res["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    res["Access-Control-Allow-Headers"] = "Content-Type"
+
     res['Content-Type'] = 'text/plain'
     res['Content-Disposition'] = "attachment; filename=\"#{tts.filename}.base64\""
     res['Content-Length'] = base64_mp3_data.bytesize.to_s
