@@ -69,7 +69,15 @@ class TTS
   end
 
   def download_file
-    HTTP.get(download_link).to_s
+    uri = URI(download_link)
+
+    Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+      request = Net::HTTP::Get.new(uri)
+
+      http.request(request) do |http_response|
+        http_response.read_body
+      end
+    end
   end
 
   def download!
