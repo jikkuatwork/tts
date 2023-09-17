@@ -26,11 +26,10 @@ Handler = Proc.new do |req, res|
 
     res['Content-Type'] = 'audio/mpeg'
     res['Content-Disposition'] = "attachment; filename=\"parayu.mp3\""
-    res['Content-Length'] = mp3_data.bytesize.to_s
+    res['Content-Length'] = mp3_data.bytesize.to_s # Use bytesize of mp3_data, not the Array
     res.body = [mp3_data] # Set the response body as an Array containing the MP3 data
   else
     res.status = 500
     res.body = 'Error: Unable to retrieve MP3 data'
   end
 end
-
