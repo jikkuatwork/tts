@@ -6,7 +6,7 @@ require_relative "../TTS.rb"
 
 Handler = Proc.new do |env|
   req = Rack::Request.new(env)
-  text = req.GET['text'] || 'Hello World'
+  text = req.params['text'] || 'Hello World'
   decoded_text = URI.decode_www_form_component(text)
   tts = TTS.new(decoded_text)
   download_link = tts.download_link
@@ -40,4 +40,3 @@ Handler = Proc.new do |env|
     res.finish
   end
 end
-
