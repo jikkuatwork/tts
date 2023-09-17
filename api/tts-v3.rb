@@ -2,7 +2,8 @@ require 'bundler/setup'
 require 'rack'
 require_relative "../TTS.rb"
 
-Handler = Proc.new do |req, res|
+Handler = Proc.new do |env|
+  req = Rack::Request.new(env)
   text = req.query['text'] || 'Hello World'
   decoded_text = URI.decode_www_form_component(text)
   tts = TTS.new(decoded_text)
@@ -19,6 +20,7 @@ Handler = Proc.new do |req, res|
   end
 
   if mp3_data
+    res = Rack::Response.new
     res.status = 200
     res["Access-Control-Allow-Origin"] = "*"
     res["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
@@ -27,10 +29,12 @@ Handler = Proc.new do |req, res|
     res['Content-Type'] = 'audio/mpeg'
     res['Content-Disposition'] = "attachment; filename=\"parayu.mp3\""
     res['Content-Length'] = mp3_data.bytesize.to_s # Use bytesize of mp3_data
-    res.body = mp3_data # Set the response body directly to the MP3 data
+    res.write mp3_data # Use Rack::Response#write to set the response body
+    res.finish # Call finish to finalize the response
   else
+    res = Rack::Response.new
     res.status = 500
-    res.body = 'Error: Unable to retrieve MP3 data'
+    res.write 'Error: Unable to retrieve MP3 data'
+    res.finish
   end
 end
-
