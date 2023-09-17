@@ -4,7 +4,8 @@ require_relative "../TTS.rb"
 
 Handler = Proc.new do |req, res|
   text = req.query['text'] || 'Hello World'
-  tts = TTS.new(text)
+  decoded_text = URI.decode_www_form_component(text)
+  tts = TTS.new(decoded_text)
   download_link = tts.download_link
 
   uri = URI(download_link)
