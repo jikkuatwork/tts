@@ -1,9 +1,10 @@
 require 'bundler/setup'
 require 'rack'
-require_relative '../TTS.rb' # Assuming the TTS class is in a separate file named 'tts.rb'
+# require_relative 'tts' # Assuming the TTS class is in a separate file named 'tts.rb'
 
 Handler = Proc.new do |req, res|
   text = req.query['text'] || 'Hello World'
+  puts TTS
   tts = TTS.new(text)
   download_link = tts.download_link
 
@@ -18,11 +19,12 @@ Handler = Proc.new do |req, res|
   end
 
   if mp3_data
+    base64_mp3_data = Base64.strict_encode64(mp3_data)
     res.status = 200
-    res['Content-Type'] = 'audio/mpeg'
-    res['Content-Disposition'] = "attachment; filename=\"#{tts.filename}\""
-    res['Content-Length'] = mp3_data.bytesize.to_s
-    res.body = mp3_data
+    res['Content-Type'] = 'text/plain'
+    res['Content-Disposition'] = "attachment; filename=\"#{tts.filename}.base64\""
+    res['Content-Length'] = base64_mp3_data.bytesize.to_s
+    res.body = base64_mp3_data
   else
     res.status = 500
     res.body = 'Error: Unable to retrieve MP3 data'
