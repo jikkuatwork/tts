@@ -1,3 +1,4 @@
+require 'bundler/setup'
 require 'rack'
 require_relative 'tts' # Assuming the TTS class is in a separate file named 'tts.rb'
 
@@ -21,10 +22,10 @@ Handler = Proc.new do |req, res|
     res['Content-Type'] = 'audio/mpeg'
     res['Content-Disposition'] = "attachment; filename=\"#{tts.filename}\""
     res['Content-Length'] = mp3_data.bytesize.to_s
-    res.write mp3_data
+    res.body = mp3_data
   else
     res.status = 500
-    res.write 'Error: Unable to retrieve MP3 data'
+    res.body = 'Error: Unable to retrieve MP3 data'
   end
 end
 
