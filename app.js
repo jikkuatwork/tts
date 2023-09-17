@@ -103,7 +103,7 @@ window.app = {
     const encodedText = encodeURIComponent(text)
 
     // Fetch the audio data from the API
-    const audioData = await fetch(`${app.api}-v2?text=${encodedText}`).then(r =>
+    const audioData = await fetch(`${app.api}?text=${encodedText}`).then(r =>
       r.arrayBuffer()
     )
 

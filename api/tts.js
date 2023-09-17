@@ -1,4 +1,3 @@
-// api/tts.js
 const { parse } = require("url")
 const https = require("https")
 const TTS = require("../TTS")
@@ -14,27 +13,16 @@ module.exports = async (req, res) => {
     const requestOptions = new URL(downloadLink)
     https
       .get(requestOptions, response => {
-        let mp3Data = []
+        res.setHeader("Access-Control-Allow-Origin", "*")
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type")
+        res.setHeader("Content-Type", "audio/mpeg")
+        res.setHeader(
+          "Content-Disposition",
+          `attachment; filename="${tts.filename}.mp3"`
+        )
 
-        response.on("data", chunk => {
-          mp3Data.push(chunk)
-        })
-
-        response.on("end", () => {
-          const base64Mp3Data = Buffer.concat(mp3Data).toString("base64")
-
-          res.statusCode = 200
-          res.setHeader("Access-Control-Allow-Origin", "*")
-          res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-          res.setHeader("Access-Control-Allow-Headers", "Content-Type")
-          res.setHeader("Content-Type", "text/plain")
-          res.setHeader(
-            "Content-Disposition",
-            `attachment; filename="${tts.filename}.base64"`
-          )
-          res.setHeader("Content-Length", base64Mp3Data.length)
-          res.end(base64Mp3Data)
-        })
+        response.pipe(res)
       })
       .on("error", error => {
         res.statusCode = 500
