@@ -1,10 +1,9 @@
 require 'bundler/setup'
 require 'rack'
-# require_relative 'tts' # Assuming the TTS class is in a separate file named 'tts.rb'
+require_relative "../TTS.rb"
 
 Handler = Proc.new do |req, res|
   text = req.query['text'] || 'Hello World'
-  puts TTS
   tts = TTS.new(text)
   download_link = tts.download_link
 
