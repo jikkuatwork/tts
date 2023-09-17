@@ -1,25 +1,22 @@
-require "uri"
-require "net/http"
-require_relative "../TTS.rb"
+require 'http'
+require 'rack'
 
-Handler = Proc.new do |request, response|
-  text = request.query["text"] || "Hello World"
-  decoded_text = URI.decode_www_form_component(text)
+Handler = Proc.new do |req, res|
+  text = req.query['text'] || 'Hello World'
+  api_key = 'your-api-key'
+  response = HTTP.get("https://api.voicerss.org/?key=#{api_key}&hl=en-us&src=#{text}&c=MP3&f=44khz_16bit_stereo")
 
-  # Download the MP3 file
-  mp3_url = TTS.new(decoded_text).download_link
-  mp3_data = Net::HTTP.get(URI.parse(mp3_url))
-
-  # Set response headers
-  response.status = 200
-  response["Content-Type"] = "audio/mpeg"
-  response["Content-Disposition"] = "attachment; filename=\"#{decoded_text}.mp3\""
-  response["Content-Length"] = mp3_data.bytesize
-  response["Access-Control-Allow-Origin"] = "*"
-  response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-  response["Access-Control-Allow-Headers"] = "Content-Type"
-
-  # Write the MP3 data to the response body
-  response.body = mp3_data
+  if response.status.success?
+    mp3_data = response.body.to_s
+    decoded_text = text.gsub('+', ' ')
+    res.status = 200
+    res['Content-Type'] = 'audio/mpeg'
+    res['Content-Disposition'] = "attachment; filename=\"#{decoded_text}.mp3\""
+    res['Content-Length'] = mp3_data.bytesize.to_s
+    res.write mp3_data
+  else
+    res.status = 500
+    res.write 'Error: Unable to retrieve MP3 data'
+  end
 end
 
