@@ -103,7 +103,7 @@ window.app = {
     const encodedText = encodeURIComponent(text)
 
     // Fetch the Base64 string from the API
-    const base64Mp3Data = await fetch(`${app.api}-v4?text=${encodedText}`).then(
+    const base64Mp3Data = await fetch(`${app.api}?text=${encodedText}`).then(
       r => r.text()
     )
 
