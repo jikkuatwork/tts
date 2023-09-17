@@ -1,17 +1,25 @@
-require 'http'
 require 'rack'
+require_relative 'tts' # Assuming the TTS class is in a separate file named 'tts.rb'
 
 Handler = Proc.new do |req, res|
   text = req.query['text'] || 'Hello World'
-  api_key = 'your-api-key'
-  response = HTTP.get("https://api.voicerss.org/?key=#{api_key}&hl=en-us&src=#{text}&c=MP3&f=44khz_16bit_stereo")
+  tts = TTS.new(text)
+  download_link = tts.download_link
 
-  if response.status.success?
-    mp3_data = response.body.to_s
-    decoded_text = text.gsub('+', ' ')
+  uri = URI(download_link)
+  mp3_data = nil
+
+  Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+    request = Net::HTTP::Get.new(uri)
+    http.request(request) do |http_response|
+      mp3_data = http_response.read_body
+    end
+  end
+
+  if mp3_data
     res.status = 200
     res['Content-Type'] = 'audio/mpeg'
-    res['Content-Disposition'] = "attachment; filename=\"#{decoded_text}.mp3\""
+    res['Content-Disposition'] = "attachment; filename=\"#{tts.filename}\""
     res['Content-Length'] = mp3_data.bytesize.to_s
     res.write mp3_data
   else
