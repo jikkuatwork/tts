@@ -122,20 +122,6 @@ window.app = {
     return blobUrl
   },
 
-  getAudioLink2: async text => {
-    if (text.trim() === "") {
-      return
-    }
-
-    const encodedText = encodeURIComponent(text)
-
-    const link = await fetch(`${app.api}?text=${encodedText}`).then(r =>
-      r.text()
-    )
-
-    return link
-  },
-
   loadAudio: link => (app.audioPlayer.src = link),
 
   getText: () => document.querySelector("#text-area").value,
