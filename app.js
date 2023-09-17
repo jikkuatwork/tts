@@ -132,8 +132,37 @@ window.app = {
     value: id => `${app.rootLink}?id=${id}`,
     get: () => app.clipboard.value,
     set: link => (app.clipboard.value = link),
-    copy: async () => await navigator.clipboard.writeText(app.clipboard.value),
     refresh: async () => await app.save(),
+    copy: async () => {
+      const useFallbackCopy = textToCopy => {
+        const textArea = document.createElement("textarea")
+        textArea.value = textToCopy
+        document.body.appendChild(textArea)
+        textArea.select()
+
+        try {
+          document.execCommand("copy")
+          console.log("Text copied using fallback method")
+        } catch (err) {
+          console.error("Error using fallback copy method:", err)
+        }
+
+        document.body.removeChild(textArea)
+      }
+
+      const textToCopy = app.clipboard.value
+
+      if (navigator.clipboard) {
+        try {
+          await navigator.clipboard.writeText(textToCopy)
+        } catch (err) {
+          console.error("Error using Clipboard API:", err)
+          useFallbackCopy(textToCopy)
+        }
+      } else {
+        useFallbackCopy(textToCopy)
+      }
+    },
   },
 
   getQueryValueOf: key => {
