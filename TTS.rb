@@ -68,6 +68,10 @@ class TTS
     link = prefix + suffix
   end
 
+  def download_file
+    HTTP.get(download_link).to_s
+  end
+
   def download!
     response = Net::HTTP.get_response(URI.parse(download_link))
 
