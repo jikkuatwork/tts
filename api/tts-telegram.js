@@ -29,6 +29,10 @@ module.exports = async (req, res) => {
         "Hey, I can convert your text to audio. Try sending me a message?"
     }
 
+    if (!chatText) {
+      chatText = "Sorry, can only do chat messages!"
+    }
+
     const botToken = process.env.TELEGRAM_BOT_TOKEN
     const apiUrl = `https://api.telegram.org/bot${botToken}/sendAudio`
 
