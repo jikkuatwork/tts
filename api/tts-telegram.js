@@ -35,6 +35,8 @@ module.exports = async (req, res) => {
       audio: audioUrl,
       performer: "Annie",
       track: "speech",
+      title: "Something",
+      caption: "Another Thing",
     }
 
     const requestOptions = {
