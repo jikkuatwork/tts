@@ -33,7 +33,8 @@ module.exports = async (req, res) => {
     const payload = {
       chat_id: chatId,
       audio: audioUrl,
-      caption: "audio", // Set the audio file's name to "audio"
+      performer: "Annie",
+      track: "speech",
     }
 
     const requestOptions = {
