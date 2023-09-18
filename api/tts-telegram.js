@@ -21,14 +21,14 @@ module.exports = async (req, res) => {
   req.on("end", async () => {
     const update = JSON.parse(body)
     const chatId = update.message.chat.id
-    const text = "Hello, how are you?"
 
     const botToken = process.env.TELEGRAM_BOT_TOKEN
-    const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`
+    const apiUrl = `https://api.telegram.org/bot${botToken}/sendAudio`
 
+    const audioUrl = "https://parayu.toolbomber.com/assets/sample.mp3"
     const payload = {
       chat_id: chatId,
-      text,
+      audio: audioUrl,
     }
 
     const requestOptions = {
