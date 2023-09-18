@@ -1,5 +1,6 @@
 // api/telegram.js
 const { IncomingMessage, ServerResponse } = require("http")
+const TTS = require("../TTS")
 
 /**
  * @param {IncomingMessage} req
@@ -25,7 +26,10 @@ module.exports = async (req, res) => {
     const botToken = process.env.TELEGRAM_BOT_TOKEN
     const apiUrl = `https://api.telegram.org/bot${botToken}/sendAudio`
 
-    const audioUrl = "https://parayu.toolbomber.com/assets/sample.mp3"
+    const tts = new TTS("Cool, man!")
+    const audioUrl = await tts.downloadLink()
+
+    // const audioUrl = "https://parayu.toolbomber.com/assets/sample.mp3"
     const payload = {
       chat_id: chatId,
       audio: audioUrl,
