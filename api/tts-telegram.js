@@ -22,7 +22,12 @@ module.exports = async (req, res) => {
   req.on("end", async () => {
     const update = JSON.parse(body)
     const chatId = update.message.chat.id
-    const chatText = update.message.text // Extract text from the chat
+    let chatText = update.message.text // Extract text from the chat
+
+    if (chatText === "/start") {
+      chatText =
+        "Hey, I can convert your text to audio. Try sending me a message?"
+    }
 
     const botToken = process.env.TELEGRAM_BOT_TOKEN
     const apiUrl = `https://api.telegram.org/bot${botToken}/sendAudio`
