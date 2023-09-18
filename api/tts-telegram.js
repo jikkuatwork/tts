@@ -1,38 +1,55 @@
-const axios = require("axios")
-const TelegramBot = require("telegram-bot-api")
+// api/telegram.js
+const { IncomingMessage, ServerResponse } = require("http")
 
-const botToken = process.env.TELEGRAM_BOT_TOKEN
-const bot = new TelegramBot({ token: botToken })
-
+/**
+ * @param {IncomingMessage} req
+ * @param {ServerResponse} res
+ */
 module.exports = async (req, res) => {
-  try {
-    const { message } = req.body
-    if (!message || !message.text) {
-      res.status(200).send("No message provided")
-      return
+  if (req.method !== "POST") {
+    res.statusCode = 405
+    res.setHeader("Allow", "POST")
+    res.end("Method Not Allowed")
+    return
+  }
+
+  let body = ""
+  req.on("data", chunk => {
+    body += chunk.toString()
+  })
+
+  req.on("end", async () => {
+    const update = JSON.parse(body)
+    const chatId = update.message.chat.id
+    const text = "Hello, how are you?"
+
+    const botToken = process.env.TELEGRAM_BOT_TOKEN
+    const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`
+
+    const payload = {
+      chat_id: chatId,
+      text,
     }
 
-    const chatId = message.chat.id
-    const fileUrl = "https://parayu.toolbomber.com/assets/sample.mp3"
-    const fileName = "sample.mp3"
-
-    const response = await axios.get(fileUrl, { responseType: "arraybuffer" })
-    const fileData = Buffer.from(response.data, "binary")
-
-    await bot.sendAudio({
-      chat_id: chatId,
-      audio: {
-        value: fileData,
-        options: {
-          filename: fileName,
-          contentType: "audio/mpeg",
-        },
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    })
+      body: JSON.stringify(payload),
+    }
 
-    res.status(200).send("Audio sent")
-  } catch (error) {
-    console.error("Error:", error)
-    res.status(500).send("An error occurred")
-  }
+    try {
+      const response = await fetch(apiUrl, requestOptions)
+      const result = await response.json()
+
+      res.statusCode = 200
+      res.setHeader("Content-Type", "application/json")
+      res.end(JSON.stringify(result))
+    } catch (error) {
+      console.error(error)
+      res.statusCode = 500
+      res.end("Internal Server Error")
+    }
+  })
 }
