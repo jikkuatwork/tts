@@ -34,9 +34,8 @@ module.exports = async (req, res) => {
       chat_id: chatId,
       audio: audioUrl,
       performer: "Annie",
-      track: "speech",
+      track: 2,
       title: "Something",
-      caption: "Another Thing",
     }
 
     const requestOptions = {
